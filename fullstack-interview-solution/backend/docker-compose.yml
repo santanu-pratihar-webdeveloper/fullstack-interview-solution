@@ -1,0 +1,69 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: ci_app
+      MYSQL_USER: ciuser
+      MYSQL_PASSWORD: cipass
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -prootpass || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # Uncomment to try PostgreSQL instead of MySQL
+  # pgdb:
+  #   image: postgres:16
+  #   environment:
+  #     POSTGRES_PASSWORD: rootpass
+  #     POSTGRES_USER: ciuser
+  #     POSTGRES_DB: ci_app
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - pg_data:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_DEFAULT_HOST: db
+      DB_DEFAULT_DATABASE: ci_app
+      DB_DEFAULT_USERNAME: ciuser
+      DB_DEFAULT_PASSWORD: cipass
+      # Switch driver to 'Postgre' and host to 'pgdb' if using postgres service
+      DB_DEFAULT_DRIVER: MySQLi
+      APP_ENV: development
+      CI_ENVIRONMENT: development
+      APP_BASE_URL: http://localhost:8080
+      JWT_SECRET: "dev_super_secret_change_me"
+    ports:
+      - "8080:80"
+    volumes:
+      - ./app:/var/www/html/app
+      - ./writable:/var/www/html/writable
+      - ./public/.htaccess:/var/www/html/public/.htaccess
+      - ./public/index.php:/var/www/html/public/index.php
+      - ./composer.json:/var/www/html/composer.json
+      - ./spark:/var/www/html/spark
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8081:8080
+
+volumes:
+  db_data:
+  pg_data:

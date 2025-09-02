@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CI4 Auth Demo</title>
+    <style>
+      body { font-family: system-ui, Arial, sans-serif; margin:0; background:#0b1023; color:#fff; }
+      .nav { display:flex; gap:12px; padding:14px 20px; background:#111736; position:sticky; top:0; }
+      .nav a { color:#9ec1ff; text-decoration:none; padding:6px 10px; border-radius:8px; background:#0f1a3d; }
+      .card { background:#121a3b; padding:20px; border-radius:14px; box-shadow:0 10px 30px rgba(0,0,0,.25); }
+      .grid { display:grid; gap:16px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+      input, select { width:100%; padding:10px; border-radius:10px; border:1px solid #2d3d7a; background:#0d1440; color:#e7efff; }
+      button { background:#3b82f6; border:none; padding:10px 14px; border-radius:10px; color:#fff; cursor:pointer; }
+      table { width:100%; border-collapse: collapse; }
+      th, td { padding:10px; border-bottom:1px solid #243063; text-align:left; }
+      .container { max-width: 1000px; margin: 20px auto; padding: 0 16px; }
+      .hero { padding: 30px 20px; text-align:center; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
